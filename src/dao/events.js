@@ -1,9 +1,7 @@
 'use strict';
 
-const db = require('api/db');
-
+const db = require('src/db');
 const eventCollection = db.collection('events');
-
 exports.getEventsForQuery = function (query) {
   let projection = {};
   if (query.projection) {

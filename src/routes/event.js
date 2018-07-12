@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const eventHelpers = require('api/events');
+const eventHelpers = require('src/events');
 const validation = require('express-joi-validation')();
-const eventsValidation = require('api/validations/events');
-const utils = require('api/utils');
+const eventsValidation = require('src/validations/events');
+const utils = require('src/utils');
 
 /**
  * This will get an employee for query
@@ -38,10 +38,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:uid', (req, res, next) => {
-  return eventHelpers.getEvents([uid])
+  console.log();
+  return eventHelpers.getEvents([req.params.uid])
   .then((result) => {
     res.json(utils.omitId(result[0]));
-  });
+  })
+  .catch(next);
 });
 
 /**

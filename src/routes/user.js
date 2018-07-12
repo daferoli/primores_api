@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const userHelpers = require('api/users');
+const userHelpers = require('src/users');
 const validation = require('express-joi-validation')();
-const usersValidation = require('api/validations/users');
-const utils = require('api/utils');
+const usersValidation = require('src/validations/users');
+const utils = require('src/utils');
 
 /**
  * This will get an employee for query

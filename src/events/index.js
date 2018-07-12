@@ -1,4 +1,4 @@
-const eventsDao = require('api/dao/events');
+const eventsDao = require('src/dao/events');
 const uuid = require('uuid/v4');
 
 /**

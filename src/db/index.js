@@ -3,8 +3,9 @@
 var Promise = require('bluebird');
 var MongoClient = require('mongodb').MongoClient;
 var Collection = require('mongodb').Collection;
+const env = require('env-var');
 
-var MONGO_URL = 'mongodb://localhost:27017/PRIMORES';
+var MONGO_URL = env.get('MONGO_URL').asString() || 'mongodb://localhost:27017/PRIMORES';
 var RETRY_INTERVAL = 10000;
 
 var collectionFns = Object.keys(Collection.prototype);
@@ -19,7 +20,6 @@ exports.db = new Promise(function(resolve) {
 // Returns an object that can be used just like a Mongo Collection object.
 // The results of each collection function will be a BLUEBIRD promise.
 exports.collection = function(collectionName) {
-
   var collPromise = exports.db.call('collection', collectionName);
 
   var res = {};
@@ -39,7 +39,9 @@ exports.collection = function(collectionName) {
 // Will call onConnect(database) only after successfully connecting to the database
 function attemptConnection(onConnect) {
   Promise.resolve(MongoClient.connect(MONGO_URL))
-  .then(onConnect)
+  .then((res) => {
+    onConnect(res);
+  })
   .catch(function(err) {
     console.log('Error connecting to mongo, trying again later', err.stack || err);
     Promise.delay(RETRY_INTERVAL).then(function() {

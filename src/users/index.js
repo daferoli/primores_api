@@ -1,4 +1,4 @@
-const usersDao = require('api/dao/users');
+const usersDao = require('src/dao/users');
 const uuid = require('uuid/v4');
 
 /**

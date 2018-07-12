@@ -1,6 +1,6 @@
 'use strict';
 
-const db = require('api/db');
+const db = require('src/db');
 const userCollection = db.collection('users');
 
 exports.getUsersForQuery = function (query) {
