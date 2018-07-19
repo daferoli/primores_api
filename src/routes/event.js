@@ -38,10 +38,19 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:uid', (req, res, next) => {
-  console.log();
   return eventHelpers.getEvents([req.params.uid])
   .then((result) => {
     res.json(utils.omitId(result[0]));
+  })
+  .catch(next);
+});
+
+router.get('/office/:officeName', (req, res, next) => {
+  console.log('getting events by office: ' + req.params.officeName);
+  return eventHelpers.getEventsByOffice(req.params.officeName)
+  .then((result) => {
+    console.log('returning events for office: ' + req.params.officeName);
+    res.json(utils.omitIdsFromArray(result));
   })
   .catch(next);
 });
@@ -58,7 +67,7 @@ router.post('/', validation.body(eventsValidation.create), (req, res, next) => {
 });
 
 /**
- * update an event
+ * Update an event
  */
 router.put('/:uid', validation.body(eventsValidation.update), (req, res, next) => {
   return eventHelpers.updateEvent(req.params.uid, req.body)

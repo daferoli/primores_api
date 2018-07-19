@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const HOST_PORT = env.get('PRIMORES_PORT').asIntPositive() || 8080;
+const HOST_PORT = env.get('PRIMORES_PORT', 9090).asIntPositive();
 
 app.use(bodyParser.json());
 app.use(cors());

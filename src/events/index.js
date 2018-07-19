@@ -23,6 +23,12 @@ exports.getEvents = function(uids) {
   });
 };
 
+exports.getEventsByOffice = function(officeName) {
+  return eventsDao.getEventsForQuery({
+    office: officeName
+  });
+}
+
 /**
  * Updates a single event
  */
