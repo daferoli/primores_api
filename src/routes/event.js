@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const eventHelpers = require('src/events');
-const validation = require('express-joi-validation')();
+const Joi = require('joi');
 const eventsValidation = require('src/validations/events');
 const utils = require('src/utils');
 
@@ -46,10 +46,8 @@ router.get('/:uid', (req, res, next) => {
 });
 
 router.get('/office/:officeName', (req, res, next) => {
-  console.log('getting events by office: ' + req.params.officeName);
   return eventHelpers.getEventsByOffice(req.params.officeName)
   .then((result) => {
-    console.log('returning events for office: ' + req.params.officeName);
     res.json(utils.omitIdsFromArray(result));
   })
   .catch(next);
@@ -58,7 +56,12 @@ router.get('/office/:officeName', (req, res, next) => {
 /**
  * Create new event after validaing body data
  */
-router.post('/', validation.body(eventsValidation.create), (req, res, next) => {
+router.post('/', (req, res, next) => {
+  const valid = Joi.validate(req.body, eventsValidation.create);
+  if(valid.error) {
+    res.status(400).send(valid.error);
+  }
+  console.log('Attempting to create event', req.body);
   return eventHelpers.createEvent(req.body)
   .then((createdEvent) => {
     res.json(utils.omitId(createdEvent.value));
@@ -69,7 +72,11 @@ router.post('/', validation.body(eventsValidation.create), (req, res, next) => {
 /**
  * Update an event
  */
-router.put('/:uid', validation.body(eventsValidation.update), (req, res, next) => {
+router.put('/:uid', (req, res, next) => {
+  const valid = Joi.validate(req.body, eventsValidation.create);
+  if(valid.error) {
+    res.status(400).send(valid.error);
+  }
   return eventHelpers.updateEvent(req.params.uid, req.body)
   .then((createdEvent) => {
     res.json(utils.omitId(createdEvent.value));
