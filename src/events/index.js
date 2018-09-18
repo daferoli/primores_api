@@ -25,9 +25,9 @@ exports.getEvents = function(uids) {
   });
 };
 
-exports.getEventsByOffice = function(officeName) {
+exports.getEventsByLocation = function(locationName) {
   return eventsDao.getEventsForQuery({
-    office: officeName
+    location: locationName
   });
 }
 
