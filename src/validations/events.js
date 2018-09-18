@@ -1,9 +1,11 @@
+'use strict';
+
 const Joi = require('joi');
 
 const eventGet = Joi.array().items(Joi.string().guid({version:['uuidv4']}).required());
 
 const eventCreate = Joi.object().keys({
-  office: Joi.string().required(),
+  location: Joi.string().required(),
   name: Joi.string().required(),
   description: Joi.string(),
   attendees: Joi.array().items(Joi.string().guid({version:['uuidv4']})),
@@ -12,8 +14,8 @@ const eventCreate = Joi.object().keys({
 });
 
 const eventUpdate = Joi.object().keys({
-  uid: Joi.string().guid({version:['uuidv4']}),
-  office: Joi.string(),
+  uid: Joi.string().guid({version:['uuidv4']}).required(),
+  location: Joi.string(),
   name: Joi.string(),
   description: Joi.string(),
   attendees: Joi.array().items(Joi.string().guid({version:['uuidv4']})),
@@ -25,9 +27,9 @@ module.exports = {
   get: eventGet,
   create: eventCreate,
   update: eventUpdate,
-  opts: { //These are the default options for body requests for express-joi-validation
+  opts: {
     convert: true,
-    allowUnknown: false,
+    stripUnknown: true,
     abortEarly: false
   }
 };

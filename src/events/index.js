@@ -1,3 +1,5 @@
+'use strict';
+
 const eventsDao = require('src/dao/events');
 const uuid = require('uuid/v4');
 

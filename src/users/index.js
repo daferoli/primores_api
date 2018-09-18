@@ -1,3 +1,5 @@
+'use strict';
+
 const usersDao = require('src/dao/users');
 const uuid = require('uuid/v4');
 

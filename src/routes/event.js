@@ -1,3 +1,5 @@
+'use strict';
+
 const router = require('express').Router();
 const eventHelpers = require('src/events');
 const Joi = require('joi');
@@ -45,8 +47,8 @@ router.get('/:uid', (req, res, next) => {
   .catch(next);
 });
 
-router.get('/office/:officeName', (req, res, next) => {
-  return eventHelpers.getEventsByOffice(req.params.officeName)
+router.get('/location/:locationName', (req, res, next) => {
+  return eventHelpers.getEventsByLocation(req.params.locationName) 
   .then((result) => {
     res.json(utils.omitIdsFromArray(result));
   })
