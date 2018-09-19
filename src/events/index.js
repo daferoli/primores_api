@@ -1,3 +1,5 @@
+'use strict';
+
 const eventsDao = require('src/dao/events');
 const uuid = require('uuid/v4');
 
@@ -23,9 +25,9 @@ exports.getEvents = function(uids) {
   });
 };
 
-exports.getEventsByOffice = function(officeName) {
+exports.getEventsByLocation = function(locationName) {
   return eventsDao.getEventsForQuery({
-    office: officeName
+    location: locationName
   });
 }
 

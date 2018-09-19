@@ -1,3 +1,5 @@
+'use strict';
+
 const router = require('express').Router();
 const userHelpers = require('src/users');
 const validation = require('express-joi-validation')();

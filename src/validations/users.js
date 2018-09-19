@@ -1,11 +1,22 @@
+'use strict';
+
 const Joi = require('joi');
 
-module.exports = {
-  create: Joi.object().keys({
+const userCreate = Joi.object().keys({
+  name: Joi.string().required(),
+  activeLocations: Joi.array().items(Joi.object().keys({
     name: Joi.string().required(),
-    office: Joi.string().required(),
-    region: Joi.string(),
-    eventsAttended: Joi.array().items(Joi.string()),
-    email: Joi.string().email().required()
-  })
+    level: Joi.string().required()
+  })),
+  eventsAttended: Joi.array().items(Joi.string()),
+  email: Joi.string().email().required()
+});
+
+module.exports = {
+  create: userCreate,
+  opts: {
+    convert: true,
+    stripUnknown: true,
+    abortEarly: false
+  }
 };

@@ -1,3 +1,5 @@
+'use strict';
+
 const R = require('ramda');
 
 exports.omitId = R.omit(['_id']);
