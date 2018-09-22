@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
-export function verifyJWTToken(token) 
+exports.verifyJWTToken = function(token) 
 {
   return new Promise((resolve, reject) =>
   {
@@ -14,40 +14,35 @@ export function verifyJWTToken(token)
       resolve(decodedToken);
     });
   });
-}
+};
 
-export function createJWToken(details)
+exports.createJWToken = function(details)
 {
   if (typeof details !== 'object')
   {
-    details = {}
+    details = {};
   }
 
   if (!details.maxAge || typeof details.maxAge !== 'number')
   {
-    details.maxAge = 3600
+    details.maxAge = 3600;
   }
 
   details.sessionData = _.reduce(details.sessionData || {}, (memo, val, key) =>
   {
     if (typeof val !== "function" && key !== "password")
     {
-      memo[key] = val
+      memo[key] = val;
     }
-    return memo
-  }, {})
+    return memo;
+  }, {});
 
   let token = jwt.sign({
      data: details.sessionData
     }, process.env.JWT_SECRET, {
       expiresIn: details.maxAge,
       algorithm: 'HS256'
-  })
+  });
 
-  return token
-}
-
-export default {
-    verifyJWTToken,
-    createJWToken
-}
+  return token;
+};

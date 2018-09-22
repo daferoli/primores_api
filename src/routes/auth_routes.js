@@ -1,16 +1,16 @@
-import express from 'express'
+const express = require('express');
 
-import db from '../models'
-import { createJWToken } from '../libs/auth'
-import { paramCheck } from '../middlewares'
+const db = require('../models');
+const jwt  = require('../lib/auth');
+const middleware = require('../lib/auth_middleware');
 
-const router = express.Router()
+const router = express.Router();
 
-router.post('*', paramCheck(['email', 'password']))
+router.post('*', middleware.paramCheck(['email', 'password']));
 
 router.post('/login', (req, res) =>
 {
-  let { email, password } = req.body
+  let { email, password } = req.body;
 
   db.User.findByEmail(email)
   .then((user) => (!user) ? Promise.reject("User not found.") : user)
@@ -21,21 +21,21 @@ router.post('/login', (req, res) =>
     res.status(200)
       .json({
         success: true,
-        token: createJWToken({
+        token: jwt.createJWToken({
             sessionData: user,
             maxAge: 3600
-          })
-      })
+        })
+      });
   })
   .catch((err) =>
   {
     res.status(401)
       .json({
         message: err || "Validation failed. Given email and password aren't matching."
-      })
-  })
-})
+      });
+  });
+});
 
 //router.post('/logout', (req,res)) TODO
 
-export default router
+exports.router = router;
