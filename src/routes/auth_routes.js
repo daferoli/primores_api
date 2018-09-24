@@ -1,21 +1,27 @@
+'use strict';
 const express = require('express');
 
-const db = require('../models');
-const jwt  = require('../lib/auth');
-const middleware = require('../lib/auth_middleware');
+const users = require('src/users');
+const jwt  = require('src/lib/auth');
+const middleware = require('src/lib/auth_middleware');
+const userValidation = require('src/validations/users');
+const loginValidation = require('src/validations/auth');
+const Joi = require('joi');
 
 const router = express.Router();
 
-router.post('*', middleware.paramCheck(['email', 'password']));
-
 router.post('/login', (req, res) =>
 {
-  let { email, password } = req.body;
+  const valid = Joi.validate(req.body, loginValidation.login)
+  if(valid.error) {
+    res.status(400)
+    .send('Email and password required for login');
+  }
+  let { email, password } = valid.value;
 
-  db.User.findByEmail(email)
+  users.findByEmail(email)
   .then((user) => (!user) ? Promise.reject("User not found.") : user)
-  .then((user) => user.comparePassword(password))
-  .then((user) => user.publicParse(user))
+  .then((user) => users.comparePassword(user, password))
   .then((user) =>
   {
     res.status(200)
@@ -36,6 +42,18 @@ router.post('/login', (req, res) =>
   });
 });
 
+router.post('/signup', (req, res) => {
+  const valid = Joi.validate(req.body, userValidation.create);
+  if(valid.error) {
+    res.status(400)
+    .send('User not Valid: '+ valid.error);
+  } else {
+    return users.createUser(valid.value)
+    .then(() => res.status(201).send('User Created'))
+    .catch((err) => res.status(400).send('Error on User Create: ' + err));
+  }
+})
+
 //router.post('/logout', (req,res)) TODO
 
-exports.router = router;
+module.exports = router;

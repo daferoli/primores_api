@@ -9,7 +9,8 @@ const userCreate = Joi.object().keys({
     level: Joi.string().required()
   })),
   eventsAttended: Joi.array().items(Joi.string()),
-  email: Joi.string().email().required()
+  email: Joi.string().email().required(),
+  password: Joi.string().required()
 });
 
 module.exports = {

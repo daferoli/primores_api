@@ -1,3 +1,4 @@
+'use strict';
 const jwt = require('./auth');
 
 exports.verifyJWT = function(req, res, next)

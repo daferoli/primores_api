@@ -39,16 +39,17 @@ router.get('/', (req, res, next) => {
   .catch(next);
 });
 
-/**
- * Create new user after validaing body data
- */
-router.post('/', validation.body(usersValidation.create), (req, res, next) => {
-  return userHelpers.createUser(req.body)
-  .then((createdUser) => {
-    res.json(utils.omitId(createdUser.value));
-  })
-  .catch(next);
-});
+//THIS SHOULD BE HANDLED BY THE AUTH ROUTES
+// /**
+//  * Create new user after validaing body data
+//  */
+// router.post('/', validation.body(usersValidation.create), (req, res, next) => {
+//   return userHelpers.createUser(req.body)
+//   .then((createdUser) => {
+//     res.json(utils.omitId(createdUser.value));
+//   })
+//   .catch(next);
+// });
 
 /**
  * update an user

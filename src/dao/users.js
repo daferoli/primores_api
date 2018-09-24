@@ -15,12 +15,12 @@ exports.getUsersForQuery = function (query) {
 };
 
 exports.upsertUser = function (query, user) {
-  const options = {
-    upsert: true,
-    new: true
-  };
+    const options = {
+        upsert: true,
+        new: true
+    };
 
-  return userCollection.findAndModify(query, null, user, options);
+    return userCollection.findAndModify(query, null, user, options);
 };
 
 exports.deleteUsers = function (query) {
