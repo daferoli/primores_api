@@ -1,5 +1,6 @@
 'use strict';
 const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 exports.verifyJWTToken = function(token) 
 {

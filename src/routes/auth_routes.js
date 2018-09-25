@@ -19,7 +19,7 @@ router.post('/login', (req, res) =>
   }
   let { email, password } = valid.value;
 
-  users.findByEmail(email)
+  users.getUserByEmail(email)
   .then((user) => (!user) ? Promise.reject("User not found.") : user)
   .then((user) => users.comparePassword(user, password))
   .then((user) =>
@@ -35,6 +35,7 @@ router.post('/login', (req, res) =>
   })
   .catch((err) =>
   {
+    console.log('There was Error: ', err);
     res.status(401)
       .json({
         message: err || "Validation failed. Given email and password aren't matching."

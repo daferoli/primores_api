@@ -42,10 +42,11 @@ exports.getUsers = function(uids) {
     });
 };
 
-exports.getUsersByEmail = function(email){
+exports.getUserByEmail = function(email){
     return usersDao.getUsersForQuery({
         email: email
     })
+    .then((userArray) => userArray[0]);
 }
 
 /**
@@ -69,7 +70,9 @@ exports.deleteUser = function(uid) {
 };
 
 exports.comparePassword = function(user, password) {
-    return bcrypt.compare(user.password, password)
+    console.log('hashword: ', user);
+    console.log('password: ', password);
+    return bcrypt.compare(password, user.password)
     .then((res) => {
         if(res === true) {
             return user;
