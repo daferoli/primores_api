@@ -70,8 +70,6 @@ exports.deleteUser = function(uid) {
 };
 
 exports.comparePassword = function(user, password) {
-    console.log('hashword: ', user);
-    console.log('password: ', password);
     return bcrypt.compare(password, user.password)
     .then((res) => {
         if(res === true) {

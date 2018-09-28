@@ -4,6 +4,7 @@ const router = require('express').Router();
 const userHelpers = require('src/users');
 const validation = require('express-joi-validation')();
 const usersValidation = require('src/validations/users');
+const authMiddleware = require('src/lib/auth_middleware');
 const utils = require('src/utils');
 
 /**
@@ -27,29 +28,27 @@ router.get('/', (req, res, next) => {
 
   return userHelpers.getUsers(passedUids)
   .then((result) => {
-    const removedIds = utils.omitIdsFromArray(result);
+    const removedIds = utils.omitUserDataFromArray(result);
     if (returnArray) {
       //Expects all from array
-      res.json(removedIds)
+      res.status(200).json(removedIds)
     } else {
       //Expects only one
-      res.json(removedIds[0]);
+      res.status(200).json(removedIds[0]);
     }
   })
   .catch(next);
 });
 
-//THIS SHOULD BE HANDLED BY THE AUTH ROUTES
-// /**
-//  * Create new user after validaing body data
-//  */
-// router.post('/', validation.body(usersValidation.create), (req, res, next) => {
-//   return userHelpers.createUser(req.body)
-//   .then((createdUser) => {
-//     res.json(utils.omitId(createdUser.value));
-//   })
-//   .catch(next);
-// });
+// Return data of the currently logged in (by JWT) user
+router.get('/me', authMiddleware.verifyJWT, (req, res, next) => {
+  // req.userEmail should be added in the verifyJWT middleware
+  return userHelpers.getUserByEmail(req.userEmail)
+  .then((userData) => {
+    res.status(200).json(utils.omitUserData(userData));
+  })
+  .catch(next);
+});
 
 /**
  * update an user
@@ -57,7 +56,7 @@ router.get('/', (req, res, next) => {
 router.put('/:uid', validation.body(usersValidation.update), (req, res, next) => {
   return userHelpers.updateuser(req.params.uid, req.body)
   .then((createduser) => {
-    res.json(utils.omitId(createduser.value));
+    res.json(utils.omitUserData(createduser.value));
   })
   .catch(next);
 });
@@ -65,7 +64,7 @@ router.put('/:uid', validation.body(usersValidation.update), (req, res, next) =>
 router.delete('/:uid', (req, res, next) => {
   return userHelpers.deleteuser(req.params.uid)
   .then(() => {
-    res.json({success:true});
+    res.status(204).json({success:true});
   })
   .catch(next);
 });

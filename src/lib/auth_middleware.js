@@ -8,7 +8,7 @@ exports.verifyJWT = function(req, res, next)
   jwt.verifyJWTToken(token)
     .then((decodedToken) =>
     {
-      req.user = decodedToken.data;
+      req.userEmail = decodedToken.data;
       next();
     })
     .catch((err) =>

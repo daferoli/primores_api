@@ -25,21 +25,22 @@ router.post('/login', (req, res) =>
   .then((user) =>
   {
     res.status(200)
-      .json({
-        success: true,
-        token: jwt.createJWToken({
-            sessionData: user,
-            maxAge: 3600
-        })
-      });
+    .json({
+      success: true,
+      loggedInUser: user.email,
+      token: jwt.createJWToken({
+          sessionData: user.email,
+          maxAge: 3600
+      })
+    });
   })
   .catch((err) =>
   {
-    console.log('There was Error: ', err);
+    console.error('There was Error: ', err);
     res.status(401)
-      .json({
-        message: err || "Validation failed. Given email and password aren't matching."
-      });
+    .json({
+      message: err || "Validation failed. Given email and password aren't matching."
+    });
   });
 });
 
@@ -55,6 +56,6 @@ router.post('/signup', (req, res) => {
   }
 })
 
-//router.post('/logout', (req,res)) TODO
+//router.post('/logout', (req,res)) This may be able to be done with just the UI
 
 module.exports = router;

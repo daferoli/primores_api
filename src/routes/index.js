@@ -8,7 +8,7 @@ const authMiddleware = require('src/lib/auth_middleware');
 
 router.use('/events', eventRoutes);
 
-router.use('/users', authMiddleware.verifyJWT, userRoutes);
+router.use('/users', userRoutes);
 
 router.use('/locations', locationRoutes);
 
@@ -16,7 +16,8 @@ router.get('/test', function(req, res) {
   res.status(200).send('Hello, World!');
 });
 
-router.get('/testlogin', authMiddleware.verifyJWT, function(req,res) {
+router.get('/testlogin', authMiddleware.verifyJWT,
+ function(req,res) {
   res.status(200).send('You are logged in!');
 });
 
