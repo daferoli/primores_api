@@ -14,13 +14,16 @@ exports.getUsersForQuery = function (query) {
   .then((cursor) => cursor.toArray());
 };
 
-exports.upsertUser = function (query, user) {
-    const options = {
-        upsert: true,
-        new: true
-    };
+exports.upsertUser = function (query, user, opts) {
+    if(!opts) {
+        opts = {
+            upsert: true,
+            new: true
+        };
+    }
 
-    return userCollection.findAndModify(query, null, user, options);
+
+    return userCollection.findAndModify(query, null, user, opts);
 };
 
 exports.deleteUsers = function (query) {

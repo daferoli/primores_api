@@ -54,7 +54,7 @@ router.get('/me', authMiddleware.verifyJWT, (req, res, next) => {
  * update an user
  */
 router.put('/:uid', validation.body(usersValidation.update), (req, res, next) => {
-  return userHelpers.updateuser(req.params.uid, req.body)
+  return userHelpers.updateUser(req.params.uid, req.body)
   .then((createduser) => {
     res.json(utils.omitUserData(createduser.value));
   })
@@ -62,7 +62,7 @@ router.put('/:uid', validation.body(usersValidation.update), (req, res, next) =>
 });
 
 router.delete('/:uid', (req, res, next) => {
-  return userHelpers.deleteuser(req.params.uid)
+  return userHelpers.deleteUser(req.params.uid)
   .then(() => {
     res.status(204).json({success:true});
   })

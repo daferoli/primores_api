@@ -53,7 +53,7 @@ exports.getUserByEmail = function(email){
  * Updates a single user
  */
 exports.updateUser = function(uid, userData) {
-    return usersDao.updateUser({
+    return usersDao.upsertUser({
         uid: uid
     }, {
         $set: userData
