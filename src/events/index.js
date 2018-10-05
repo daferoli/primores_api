@@ -8,11 +8,11 @@ const uuid = require('uuid/v4');
  * @param {*} eventData validated event data
  */
 exports.createEvent = function(eventData) {
-  eventData.uid = uuid();
+    eventData.uid = uuid();
 
-  return eventsDao.upsertEvent({
-    uid: eventData.uid
-  }, eventData);
+    return eventsDao.upsertEvent({
+        uid: eventData.uid
+    }, eventData);
 };
 
 /**
@@ -20,30 +20,52 @@ exports.createEvent = function(eventData) {
  * @param {Array} uids list of events to retrieve
  */
 exports.getEvents = function(uids) {
-  return eventsDao.getEventsForQuery({
-    uid: {$in: uids || []}
-  });
+    return eventsDao.getEventsForQuery({
+        uid: {$in: uids || []}
+    });
 };
 
 exports.getEventsByLocation = function(locationName) {
-  return eventsDao.getEventsForQuery({
-    location: locationName
-  });
+    return eventsDao.getEventsForQuery({
+        location: locationName
+    });
 }
 
 /**
  * Updates a single event
  */
 exports.updateEvent = function(uid, eventData) {
-  return eventsDao.upsertEvent({
-    uid: uid
-  }, {
-    $set: eventData
-  }, {
-    upsert: false,
-    new: true
-  });
+    return eventsDao.upsertEvent({
+        uid: uid
+    }, {
+        $set: eventData
+    }, {
+        upsert: false,
+        new: true
+    });
 };
+
+exports.addToAttendeeArray = function(uid, attendeeData) {
+    return eventsDao.upsertEvent({
+        uid: uid
+    }, {
+        $push: attendeeData //TODO: It may not be a bad idea in the future to run pullAll before this to make sure only 1 instance of the user stays in the db
+    }, {
+        upsert: false,
+        new: true
+    });
+}
+
+exports.removeFromAttendeeArray = function(uid, attendeeData) {
+    return eventsDao.upsertEvent({
+        uid: uid
+    }, {
+        $push: attendeeData //TODO: It may not be a bad idea in the future to run pullAll before this to make sure only 1 instance of the user stays in the db
+    }, {
+        upsert: false,
+        new: true
+    });
+}
 
 exports.deleteEvent = function(uid) {
   return eventsDao.deleteEvents({

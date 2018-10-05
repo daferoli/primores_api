@@ -1,9 +1,9 @@
 'use strict';
 
 const router = require('express').Router();
-const eventRoutes = require('src/routes/event');
-const userRoutes = require('src/routes/user');
-const locationRoutes = require('src/routes/location');
+const eventRoutes = require('src/routes/event_routes');
+const userRoutes = require('src/routes/user_routes');
+const locationRoutes = require('src/routes/location_routes');
 const authMiddleware = require('src/lib/auth_middleware');
 
 router.use('/events', eventRoutes);
