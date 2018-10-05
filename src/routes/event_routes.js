@@ -40,6 +40,10 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
+/**
+ * get event by uid
+ * This is also possible with the previous route, but this is added as a convinience
+ */
 router.get('/:uid', (req, res, next) => {
     return eventHelpers.getEvents([req.params.uid])
     .then((result) => {
@@ -48,6 +52,9 @@ router.get('/:uid', (req, res, next) => {
     .catch(next);
 });
 
+/**
+ * get events by location
+ */
 router.get('/location/:locationName', (req, res, next) => {
     return eventHelpers.getEventsByLocation(req.params.locationName)
     .then((result) => {
@@ -83,21 +90,32 @@ router.put('/:uid', joiValidation(eventsValidation.update, eventsValidation.opts
  * Add attendee
  */
 router.put('/:uid/attendees/add', joiValidation(eventsValidation.attendee, eventsValidation.opts), (req,res,next) => {
-    const valid = Joi.validate(req.body, eventsValidation.attendee);
-    if(valid.error) {
-        res.status(400).send(valid.error);
-    }
     if(canUserChangeAttendance(req.params.uid, req.body, req.userEmail)) {
-        eventHelpers.addToAttendeeArray(req.params.uid, req.body);
+        eventHelpers.addToAttendeeArray(req.params.uid, req.body)
+        .then((updatedEvent) => {
+            console.log(updatedEvent.attendees);
+            res.status(200).json(updatedEvent.value.attendees);
+        })
+        .catch(next);
     }
 });
 
-router.put('/:uid/atendees/remove', joiValidation(eventsValidation.attendee, eventsValidation.opts), (req,res,next) => {
+/**
+ * remove attendee
+ */
+router.put('/:uid/attendees/remove', joiValidation(eventsValidation.attendee, eventsValidation.opts), (req,res,next) => {
     if(canUserChangeAttendance(req.params.uid, req.body, req.userEmail)) {
-        eventHelpers.removeFromAttendeeArray(req.params.uid, req.body);
+        eventHelpers.removeFromAttendeeArray(req.params.uid, req.body)
+        .then((updatedEvent) => {
+            res.status(200).json(updatedEvent.value.attendees);
+        })
+        .catch(next);
     }
 });
 
+/**
+ * delete event
+ */
 router.delete('/:uid', (req, res, next) => {
     return eventHelpers.deleteEvent(req.params.uid)
     .then(() => {

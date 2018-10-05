@@ -8,7 +8,10 @@ const eventCreate = Joi.object().keys({
   location: Joi.string().required(),
   name: Joi.string().required(),
   description: Joi.string(),
-  attendees: Joi.array().items(Joi.string().guid({version:['uuidv4']})),
+  attendees: Joi.array().items(Joi.object().keys({
+    userUid: Joi.string().guid({version:['uuidv4']}).required(),
+    email: Joi.string().email().required() // email here is used as human readable element for UI
+  })),
   cost: Joi.number().min(0).precision(2),
   date: Joi.date().iso().min('now').required()
 });
@@ -19,7 +22,7 @@ const eventUpdate = Joi.object().keys({
   name: Joi.string(),
   description: Joi.string(),
   attendees: Joi.array().items(Joi.object().keys({
-    uid: Joi.string().guid({version:['uuidv4']}).required(),
+    userUid: Joi.string().guid({version:['uuidv4']}).required(),
     email: Joi.string().email().required() // email here is used as human readable element for UI
   })),
   cost: Joi.number().min(0).precision(2),
@@ -27,7 +30,7 @@ const eventUpdate = Joi.object().keys({
 });
 
 const attendeeUpdate = Joi.object().keys({
-  uid: Joi.string().guid({version:['uuidv4']}).required(), //users uid
+  userUid: Joi.string().guid({version:['uuidv4']}).required(), //users uid
   email: Joi.string().email().required()
 });
 

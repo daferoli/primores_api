@@ -45,22 +45,28 @@ exports.updateEvent = function(uid, eventData) {
     });
 };
 
+// Add an attendee to an event
 exports.addToAttendeeArray = function(uid, attendeeData) {
     return eventsDao.upsertEvent({
         uid: uid
     }, {
-        $push: attendeeData //TODO: It may not be a bad idea in the future to run pullAll before this to make sure only 1 instance of the user stays in the db
+        $push: {
+            attendees: attendeeData
+        } //TODO: It may not be a bad idea in the future to run pull before this to make sure only 1 instance of the user stays in the db
     }, {
         upsert: false,
         new: true
     });
 }
 
+// Add an attendee to an event
 exports.removeFromAttendeeArray = function(uid, attendeeData) {
     return eventsDao.upsertEvent({
         uid: uid
     }, {
-        $push: attendeeData //TODO: It may not be a bad idea in the future to run pullAll before this to make sure only 1 instance of the user stays in the db
+        $pull: {
+            attendees: attendeeData
+        }
     }, {
         upsert: false,
         new: true
