@@ -2,9 +2,9 @@
 
 const router = require('express').Router();
 const userHelpers = require('src/users');
-const validation = require('express-joi-validation')();
 const usersValidation = require('src/validations/users');
 const authMiddleware = require('src/lib/auth_middleware');
+const joiValidation = require('src/lib/joi_middleware');
 const utils = require('src/utils');
 
 /**
@@ -51,16 +51,19 @@ router.get('/me', authMiddleware.verifyJWT, (req, res, next) => {
 });
 
 /**
- * update an user
+ * Update an user by uid
  */
-router.put('/:uid', validation.body(usersValidation.update), (req, res, next) => {
+router.put('/:uid', joiValidation(usersValidation.update, usersValidation.opts), (req, res, next) => {
   return userHelpers.updateUser(req.params.uid, req.body)
   .then((createduser) => {
-    res.json(utils.omitUserData(createduser.value));
+    res.json(utils.omitUserData(createduser.value)); // I may want to move omitUserData into the helper function
   })
   .catch(next);
 });
 
+/**
+ * Delete a user by uid
+ */
 router.delete('/:uid', (req, res, next) => {
   return userHelpers.deleteUser(req.params.uid)
   .then(() => {

@@ -8,6 +8,7 @@ const eventCreate = Joi.object().keys({
   location: Joi.string().required(),
   name: Joi.string().required(),
   description: Joi.string(),
+  status: Joi.string().allow(['active', 'archived']),
   attendees: Joi.array().items(Joi.object().keys({
     userUid: Joi.string().guid({version:['uuidv4']}).required(),
     email: Joi.string().email().required() // email here is used as human readable element for UI
@@ -21,6 +22,7 @@ const eventUpdate = Joi.object().keys({
   location: Joi.string(),
   name: Joi.string(),
   description: Joi.string(),
+  status: Joi.string().allow(['active', 'archived']),
   attendees: Joi.array().items(Joi.object().keys({
     userUid: Joi.string().guid({version:['uuidv4']}).required(),
     email: Joi.string().email().required() // email here is used as human readable element for UI

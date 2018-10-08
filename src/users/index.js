@@ -8,7 +8,7 @@ const saltRounds = 10;
 
 /**
  * Creates a new user in the dao and assigns it a uid
- * @param {*} userData validated user data
+ * @param {Object} userData validated user data
  */
 exports.createUser = function(userData) {
     userData.uid = uuid();

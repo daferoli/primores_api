@@ -73,8 +73,21 @@ exports.removeFromAttendeeArray = function(uid, attendeeData) {
     });
 }
 
+// Delete an event.
 exports.deleteEvent = function(uid) {
   return eventsDao.deleteEvents({
     uid: uid
   });
 };
+
+// Archive an event. We will want to do this to change the status of past events
+// NOTE: no routes currently use this. the intention is to run a script to archive after the event date is passed.
+exports.archiveEvent = function(uid) {
+    return eventsDao.upsertEvent({
+        uid
+    }, {
+        $set:{
+            status: 'archived'
+        }
+    });
+}

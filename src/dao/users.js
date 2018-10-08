@@ -21,8 +21,6 @@ exports.upsertUser = function (query, user, opts) {
             new: true
         };
     }
-
-
     return userCollection.findAndModify(query, null, user, opts);
 };
 
